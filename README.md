@@ -15,7 +15,6 @@
 - [Analyse Statique](#analyse-statique)
 - [Analyse Dynamique](#analyse-dynamique)
 - [Vulnérabilités Découvertes](#vulnérabilités-découvertes)
-- [Captures d'Écran](#captures-décran)
 
 ---
 
@@ -44,7 +43,7 @@ adb devices
 docker run -it --rm -p 8000:8000 -e MOBSF_ANALYZER_IDENTIFIER=emulator-5554 opensecurity/mobile-security-framework-mobsf:latest
 ```
 
-> Voir capture : [`mobsf.png`](mobsf.png)
+![Lancement MobSF via Docker](mobsf.png)
 
 ---
 
@@ -55,7 +54,7 @@ cd Desktop\Cybersecurity-Lab\Mobile-Security-Framework-MobSF
 .\scripts\start_avd.ps1 MobSF_DIVA_API_30
 ```
 
-> Voir capture : [`cmd.png`](cmd.png)
+![Démarrage AVD PowerShell](cmd.png)
 
 ---
 
@@ -68,7 +67,7 @@ Username: mobsf
 Password: mobsf
 ```
 
-> Voir capture : [`Login.png`](Login.png)
+![Page de connexion MobSF](Login.png)
 
 ---
 
@@ -83,7 +82,7 @@ L'APK `DivaApplication.apk` (package : `jakhar.aseem.diva`) est uploadé dans Mo
 - Signature v1 uniquement (vulnérable)
 - Permissions dangereuses détectées
 
-> Voir capture : [`applicationdediva.png`](applicationdediva.png)
+![Analyse Statique DIVA](applicationdediva.png)
 
 ---
 
@@ -93,11 +92,19 @@ L'APK `DivaApplication.apk` (package : `jakhar.aseem.diva`) est uploadé dans Mo
 
 Depuis le **Dynamic Analyzer**, sélectionner `DivaApplication.apk` et cliquer sur **Start Dynamic Analysis**.
 
-> Voir capture : [`dynamique.png`](dynamique.png)
+![Dynamic Analyzer - Apps disponibles](dynamique.png)
 
 ---
 
-### 5. Instrumentation avec Frida
+### 5. Émulateur Android
+
+L'émulateur tourne sous Android API 30, connecté à MobSF via ADB sur le port 5554.
+
+![Émulateur Android](P5.png)
+
+---
+
+### 6. Instrumentation avec Frida
 
 MobSF intègre **Frida** pour l'instrumentation runtime. Scripts activés :
 
@@ -107,15 +114,7 @@ MobSF intègre **Frida** pour l'instrumentation runtime. Scripts activés :
 - ✅ Debugger Check Bypass
 - ✅ Clipboard Monitor
 
-> Voir capture : [`scriptF.png`](scriptF.png)
-
----
-
-### 6. Émulateur Android (P5)
-
-L'émulateur tourne sous Android API 30, connecté à MobSF via ADB sur le port 5554.
-
-> Voir capture : [`P5.png`](P5.png)
+![Frida Scripts & Dynamic Analyzer](scriptF.png)
 
 ---
 
@@ -127,7 +126,7 @@ L'émulateur tourne sous Android API 30, connecté à MobSF via ADB sur le port 
 
 L'utilisateur entre ses credentials dans l'application :
 
-> Voir capture : [`DAtaStora.png`](DAtaStora.png)
+![Saisie credentials DIVA](DAtaStora.png)
 
 Les données sont sauvegardées en **SharedPreferences en clair** dans le fichier XML suivant :
 
@@ -143,7 +142,7 @@ Les données sont sauvegardées en **SharedPreferences en clair** dans le fichie
 
 > ⚠️ **Vulnérabilité critique :** Le mot de passe est stocké en **texte clair** sans aucun chiffrement.
 
-> Voir capture : [`XML.png`](XML.png)
+![SharedPreferences en clair](XML.png)
 
 ---
 
@@ -152,12 +151,14 @@ Les données sont sauvegardées en **SharedPreferences en clair** dans le fichie
 Via le **Dynamic Analyzer**, l'activité `APICredsActivity` expose des credentials API codés en dur dans l'interface :
 
 ```
-API Key:      123secretapikey123
+API Key:       123secretapikey123
 API User name: diva
-API Password: p@ssword
+API Password:  p@ssword
 ```
 
-> Voir capture : [`lesapi.png`](lesapi.png)
+> ⚠️ **Vulnérabilité critique :** Les credentials sont hardcodés dans le code source de l'application.
+
+![API Credentials exposés](lesapi.png)
 
 ---
 
@@ -169,25 +170,7 @@ Le **Logcat Stream** révèle des informations sensibles sur les activités lanc
 http://localhost:8000/logcat/?package=jakhar.aseem.diva
 ```
 
-> Voir capture : [`cat.png`](cat.png)
-
----
-
-## 📸 Captures d'Écran
-
-| Fichier | Description |
-|--------|-------------|
-| `Login.png` | Page de connexion MobSF |
-| `mobsf.png` | Lancement de MobSF via Docker (PowerShell) |
-| `cmd.png` | Démarrage de l'émulateur AVD via PowerShell |
-| `applicationdediva.png` | Résultats de l'analyse statique de DIVA APK |
-| `dynamique.png` | Interface Dynamic Analyzer — Apps disponibles |
-| `scriptF.png` | Instrumentation Frida + Dynamic Analyzer actif |
-| `P5.png` | Émulateur Android connecté |
-| `DAtaStora.png` | Saisie credentials dans DIVA (Insecure Data Storage) |
-| `XML.png` | Fichier SharedPreferences exposant le mot de passe en clair |
-| `lesapi.png` | API Credentials exposés dans l'activité APICreds |
-| `cat.png` | Logcat Stream — fuites d'informations |
+![Logcat Stream - fuites d'informations](cat.png)
 
 ---
 

@@ -126,7 +126,7 @@ MobSF intègre **Frida** pour l'instrumentation runtime. Scripts activés :
 
 L'utilisateur entre ses credentials dans l'application :
 
-![Saisie credentials DIVA](DAtaStora.png)
+
 
 Les données sont sauvegardées en **SharedPreferences en clair** dans le fichier XML suivant :
 

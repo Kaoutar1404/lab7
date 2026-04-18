@@ -136,7 +136,7 @@ Les données sont sauvegardées en **SharedPreferences en clair** dans le fichie
 <?xml version='1.0' encoding='utf-8' standalone='yes' ?>
 <map>
     <string name="password">1234</string>
-    <string name="user">ayoub</string>
+    <string name="user">kaoutar</string>
 </map>
 ```
 
